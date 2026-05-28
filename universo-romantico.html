@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universo Romântico — Espaço AmOri</title>
+
+  <!-- Fonte TheSeasons via CDN alternativo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Usando Cormorant Garamond como fallback serif display similar ao TheSeasons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS — extraídos do Haute Spots
+    ============================================ */
+    :root {
+      --color-bg:          #FAF9F6;   /* off-white cremoso */
+      --color-bg-menu:     #FFDEDD;   /* rosa claro menu mobile */
+      --color-bg-menu-mob: #FFD5D4;   /* rosa médio mobile */
+      --color-red:         #E43534;   /* vermelho-coral CTA */
+      --color-dark-red:    #780A0F;   /* bordô escuro hover/secondary */
+      --color-text:        #000000;
+      --color-white:       #FFFFFF;
+      --color-line:        #FAF9F6;
+
+      --font-display: 'Cormorant Garamond', 'TheSeasons', serif;
+      --font-ui:      'Cormorant Garamond', Arial, sans-serif;
+
+      /* SVGs base URL */
+      --svg-base: 'https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/';
+    }
+
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-display);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img, svg { display: block; }
+
+    /* ============================================
+       HEADER — fixo, lateral esquerda
+    ============================================ */
+    .header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 148px;
+      height: 100vh;
+      z-index: 990;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px 17px;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .header__logo {
+      pointer-events: auto;
+      margin-bottom: 28px;
+    }
+    .header__logo img {
+      width: 36px;
+      height: auto;
+    }
+    .header__logo-wordmark {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
+    .header__nav {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      pointer-events: auto;
+    }
+    .header__nav a {
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+    .header__nav a:hover { color: var(--color-red); }
+
+    /* CTA circular fixo — topo direito */
+    .header__cta {
+      position: fixed;
+      top: 10px; right: 24px;
+      width: 70px; height: 70px;
+      border-radius: 100px;
+      background-color: var(--color-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: auto;
+      z-index: 991;
+      transition: transform 0.4s cubic-bezier(0.19,1,0.22,1);
+      cursor: pointer;
+    }
+    .header__cta:hover { transform: scale(1.15); }
+    .header__cta span {
+      font-family: var(--font-display);
+      font-size: 8px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      line-height: 1.4;
+    }
+
+    /* Burger mobile */
+    .header__burger {
+      display: none;
+      position: fixed;
+      top: 18px; right: 18px;
+      width: 44px; height: 44px;
+      border-radius: 100px;
+      background-color: var(--color-red);
+      align-items: center;
+      justify-content: center;
+      z-index: 992;
+      cursor: pointer;
+      pointer-events: auto;
+      border: none;
+      outline: none;
+    }
+    .header__burger svg { width: 22px; height: 22px; }
+
+    /* ============================================
+       MOBILE MENU OVERLAY
+    ============================================ */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 995;
+      background-color: var(--color-bg-menu);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .mobile-menu.is-open {
+      display: flex;
+      opacity: 1;
+    }
+    .mobile-menu__nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .mobile-menu__nav a {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+    .mobile-menu__cta {
+      width: 110px; height: 110px;
+      border-radius: 100px;
+      background-color: var(--color-dark-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-top: 12px;
+      cursor: pointer;
+      transition: background-color 0.4s ease;
+    }
+    .mobile-menu__cta:hover { background-color: #000; }
+    .mobile-menu__cta span {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      line-height: 1.4;
+    }
+    .mobile-menu__close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-menu__decor {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .mobile-menu__decor--left {
+      left: -40px; top: 60px;
+      width: 180px;
+      transform: rotate(7deg);
+    }
+    .mobile-menu__decor--right {
+      right: -40px; top: 50px;
+      width: 240px;
+    }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .hero {
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding-left: 160px;  /* espaço para header fixo */
+    }
+
+    /* SVGs decorativos — posicionados como no original */
+    .hero__decor {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+    .hero__decor--top-right {
+      top: -80px;
+      right: -60px;
+      width: 520px;
+      opacity: 0.92;
+      transform: rotate(-6deg);
+      animation: floatY 8s ease-in-out infinite;
+    }
+    .hero__decor--bottom-left {
+      bottom: -40px;
+      left: 60px;
+      width: 480px;
+      opacity: 0.85;
+      transform: rotate(12deg);
+      animation: floatY 10s ease-in-out infinite reverse;
+    }
+    .hero__decor--mid-right {
+      top: 40%;
+      right: -80px;
+      width: 420px;
+      opacity: 0.7;
+      transform: rotate(-15deg);
+      animation: floatX 12s ease-in-out infinite;
+    }
+    .hero__decor--small {
+      top: 15%;
+      left: 140px;
+      width: 280px;
+      opacity: 0.6;
+      transform: rotate(5deg);
+      animation: floatY 9s ease-in-out infinite 2s;
+    }
+
+    @keyframes floatY {
+      0%,100% { transform: translateY(0) rotate(var(--rot, -6deg)); }
+      50%      { transform: translateY(-18px) rotate(var(--rot, -6deg)); }
+    }
+    @keyframes floatX {
+      0%,100% { transform: translateX(0) rotate(-15deg); }
+      50%      { transform: translateX(-14px) rotate(-15deg); }
+    }
+
+    /* Conteúdo central do hero */
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      max-width: 560px;
+    }
+    .hero__tag {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-red);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s cubic-bezier(0.19,1,0.22,1) 0.2s forwards;
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      color: var(--color-text);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(0.19,1,0.22,1) 0.4s forwards;
+    }
+    .hero__title em {
+      font-style: italic;
+      color: var(--color-dark-red);
+    }
+    .hero__subtitle {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 1.6vw, 18px);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      line-height: 1.7;
+      color: #444;
+      max-width: 380px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeInUp 0.9s cubic-bezier(0.19,1,0.22,1) 0.65s forwards;
+    }
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.19,1,0.22,1) 0.85s forwards;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--color-red);
+      color: var(--color-white);
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: var(--color-dark-red);
+      transform: scale(1.04);
+    }
+    .btn-ghost {
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 2px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .btn-ghost:hover { color: var(--color-red); }
+
+    /* Foto/imagem hero */
+    .hero__photo {
+      position: absolute;
+      right: 80px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      width: clamp(280px, 32vw, 500px);
+      aspect-ratio: 3/4;
+      border-radius: 4px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.4s ease 1s forwards;
+    }
+    .hero__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero__photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #FFDEDD 0%, #FAD0CF 50%, #E8B4B3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero__photo-placeholder span {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.35);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================
+       SECTION — COMO FUNCIONA
+    ============================================ */
+    .how {
+      background-color: var(--color-bg);
+      padding: 120px 80px 120px 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .how__label {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-red);
+      margin-bottom: 16px;
+    }
+    .how__title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
+      max-width: 420px;
+      margin-bottom: 72px;
+    }
+    .how__title em { font-style: italic; color: var(--color-dark-red); }
+    .how__steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      max-width: 900px;
+    }
+    .how__step-num {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 300;
+      color: #F0EDEA;
+      line-height: 1;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+    .how__step-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .how__step-text {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #555;
+      max-width: 220px;
+    }
+    .how__decor {
+      position: absolute;
+      pointer-events: none;
+      right: -100px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-20deg);
+      width: 380px;
+      opacity: 0.18;
+    }
+
+    /* ============================================
+       SECTION — UNIVERSOS
+    ============================================ */
+    .universos {
+      background-color: #F5F0EC;
+      padding: 100px 80px 100px 200px;
+      position: relative;
+    }
+    .universos__label {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-red);
+      margin-bottom: 16px;
+    }
+    .universos__title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 300;
+      margin-bottom: 60px;
+      max-width: 500px;
+      line-height: 1.1;
+    }
+    .universos__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 960px;
+    }
+    .universo-card {
+      aspect-ratio: 3/4;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.19,1,0.22,1);
+    }
+    .universo-card:hover { transform: scale(1.03); }
+    .universo-card__bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .universo-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+    }
+    .universo-card__label {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-white);
+    }
+    .universo-card--active .universo-card__overlay {
+      background: linear-gradient(to top, rgba(120,10,15,0.7) 0%, rgba(228,53,52,0.15) 100%);
+    }
+
+    /* Placeholder colorido para os cards */
+    .universo-card__placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: flex-end; padding: 16px;
+    }
+    .universo-card--romantico .universo-card__placeholder { background: linear-gradient(145deg, #FFDEDD, #E8A4A3); }
+    .universo-card--viagem    .universo-card__placeholder { background: linear-gradient(145deg, #D4E8F0, #A3C4D4); }
+    .universo-card--gamer     .universo-card__placeholder { background: linear-gradient(145deg, #2A2A3E, #4A3060); }
+    .universo-card--musica    .universo-card__placeholder { background: linear-gradient(145deg, #1A1A2E, #3D1A78); }
+
+    /* ============================================
+       SECTION — FORM / CTA FINAL
+    ============================================ */
+    .contact {
+      background-color: var(--color-bg);
+      padding: 100px 80px 100px 200px;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact__text { flex: 1; max-width: 420px; }
+    .contact__label {
+      font-size: 9px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-red);
+      margin-bottom: 16px;
+    }
+    .contact__title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .contact__title em { font-style: italic; color: var(--color-dark-red); }
+    .contact__sub {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 40px;
+    }
+    .contact__form { flex: 1; max-width: 420px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #888;
+    }
+    .form-group input,
+    .form-group textarea {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #CCC;
+      padding: 10px 0;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--color-text);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--color-red); }
+    .form-group textarea { resize: none; height: 80px; }
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--color-dark-red);
+      color: var(--color-white);
+      font-family: var(--font-display);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background-color: #000; transform: scale(1.02); }
+    .contact__decor {
+      position: absolute;
+      pointer-events: none;
+      right: -80px; bottom: -60px;
+      width: 360px;
+      opacity: 0.12;
+      transform: rotate(20deg);
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background-color: var(--color-text);
+      color: var(--color-white);
+      padding: 60px 80px 60px 200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer__brand {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+    .footer__brand span { color: var(--color-red); }
+    .footer__copy {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .footer__credit {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer__credit a { color: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.2); }
+
+    /* ============================================
+       SCROLL INDICATOR
+    ============================================ */
+    .scroll-line {
+      position: fixed;
+      left: 148px;
+      top: 0;
+      width: 1px;
+      height: 0;
+      background-color: var(--color-red);
+      z-index: 980;
+      transition: height 0.1s linear;
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media screen and (max-width: 960px) {
+      .header { display: none; }
+      .header__cta { display: none; }
+      .header__burger { display: flex; }
+
+      .hero {
+        padding: 100px 24px 60px;
+        min-height: 100svh;
+        align-items: flex-start;
+        padding-top: 100px;
+      }
+      .hero__photo {
+        display: none;
+      }
+      .hero__decor--top-right { width: 280px; right: -30px; top: -40px; }
+      .hero__decor--bottom-left { width: 260px; }
+      .hero__decor--mid-right { display: none; }
+      .hero__decor--small { width: 160px; left: 20px; }
+
+      .how {
+        padding: 80px 24px;
+      }
+      .how__steps {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .universos {
+        padding: 80px 24px;
+      }
+      .universos__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact {
+        padding: 80px 24px;
+        flex-direction: column;
+        gap: 48px;
+      }
+
+      .footer {
+        padding: 48px 24px;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      .hero__decor--top-right { width: 200px; }
+      .hero__decor--bottom-left { width: 200px; }
+      .universos__grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS LINE -->
+  <div class="scroll-line" id="scrollLine"></div>
+
+  <!-- ============================================
+       HEADER FIXO — lateral esquerda
+  ============================================ -->
+  <header class="header" id="header">
+    <a href="#hero" class="header__logo">
+      <!-- Logo inline SVG (círculo + play — extraído do Group_131.svg) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 129 129" fill="none">
+        <path d="M51.9149 45.9784C51.9149 44.5808 53.4279 43.7072 54.6383 44.4061L86.2587 62.6621C87.4691 63.3609 87.4691 65.108 86.2587 65.8068L54.6383 84.0629C53.4279 84.7617 51.9149 83.8882 51.9149 82.4905L51.9149 45.9784Z" fill="#E43534"/>
+        <circle cx="64.2708" cy="64.2344" r="44.4639" transform="rotate(-45 64.2708 64.2344)" stroke="#E43534" stroke-width="1.8156"/>
+      </svg>
+      <div class="header__logo-wordmark">Espaço<br>AmOri</div>
+    </a>
+    <nav class="header__nav">
+      <a href="#hero">Início</a>
+      <a href="#how">Como funciona</a>
+      <a href="#universos">Universos</a>
+      <a href="#contact">Contato</a>
+    </nav>
+  </header>
+
+  <!-- CTA circular fixo -->
+  <a href="#contact" class="header__cta">
+    <span>Criar<br>Agora</span>
+  </a>
+
+  <!-- Burger mobile -->
+  <button class="header__burger" id="burgerBtn" aria-label="Abrir menu">
+    <svg viewBox="0 0 26 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0.5H26" stroke="#FAF9F6" stroke-width="1.5"/>
+      <path d="M0 7H26" stroke="#FAF9F6" stroke-width="1.5"/>
+      <path d="M0 13.5H26" stroke="#FAF9F6" stroke-width="1.5"/>
+    </svg>
+  </button>
+
+  <!-- ============================================
+       MOBILE MENU OVERLAY
+  ============================================ -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
+    <!-- Decorações flutuantes no menu -->
+    <img class="mobile-menu__decor mobile-menu__decor--left"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/3(1).svg"
+         alt="" aria-hidden="true">
+    <img class="mobile-menu__decor mobile-menu__decor--right"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/Group_229.svg"
+         alt="" aria-hidden="true">
+
+    <button class="mobile-menu__close" id="menuClose" aria-label="Fechar menu">
+      <svg width="22" height="22" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#780A0F">
+          <rect transform="translate(11.31 11.31) rotate(-45) translate(-11.31 -11.31)" x="10.31" y="-3.69" width="2" height="30"/>
+          <rect transform="translate(11.31 11.31) rotate(-315) translate(-11.31 -11.31)" x="10.31" y="-3.69" width="2" height="30"/>
+        </g>
+      </svg>
+    </button>
+
+    <nav class="mobile-menu__nav">
+      <a href="#hero"    onclick="closeMenu()">Início</a>
+      <a href="#how"     onclick="closeMenu()">Como funciona</a>
+      <a href="#universos" onclick="closeMenu()">Universos</a>
+      <a href="#contact" onclick="closeMenu()">Contato</a>
+    </nav>
+
+    <a href="#contact" class="mobile-menu__cta" onclick="closeMenu()">
+      <span>Criar<br>Agora</span>
+    </a>
+  </div>
+
+  <!-- ============================================
+       HERO
+  ============================================ -->
+  <section class="hero" id="hero">
+
+    <!-- SVGs decorativos flutuantes — arquivos reais do repositório -->
+    <img class="hero__decor hero__decor--top-right"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/1.svg"
+         alt="" aria-hidden="true">
+    <img class="hero__decor hero__decor--bottom-left"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/2.svg"
+         alt="" aria-hidden="true">
+    <img class="hero__decor hero__decor--mid-right"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/3.svg"
+         alt="" aria-hidden="true">
+    <img class="hero__decor hero__decor--small"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/__.svg"
+         alt="" aria-hidden="true">
+
+    <!-- Conteúdo textual -->
+    <div class="hero__content">
+      <p class="hero__tag">Universo Romântico</p>
+      <h1 class="hero__title">
+        Para você,<br>
+        <em>com amor</em>
+      </h1>
+      <p class="hero__subtitle">
+        Crie uma mensagem única, envolvida em beleza e sentimento.
+        Cada detalhe pensado para tocar o coração de quem você ama.
+      </p>
+      <div class="hero__actions">
+        <a href="#contact" class="btn-primary">Criar minha mensagem</a>
+        <a href="#how" class="btn-ghost">Como funciona</a>
+      </div>
+    </div>
+
+    <!-- Foto/imagem hero -->
+    <div class="hero__photo">
+      <div class="hero__photo-placeholder">
+        <span>Sua foto aqui</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================
+       COMO FUNCIONA
+  ============================================ -->
+  <section class="how" id="how">
+    <img class="how__decor"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/Group_229.svg"
+         alt="" aria-hidden="true">
+
+    <p class="how__label">O processo</p>
+    <h2 class="how__title">Simples como <em>dizer eu te amo</em></h2>
+
+    <div class="how__steps">
+      <div class="how__step">
+        <div class="how__step-num">01</div>
+        <div class="how__step-title">Escolha o universo</div>
+        <p class="how__step-text">Selecione o tema que melhor representa quem você ama e o momento especial.</p>
+      </div>
+      <div class="how__step">
+        <div class="how__step-num">02</div>
+        <div class="how__step-title">Personalize</div>
+        <p class="how__step-text">Adicione sua mensagem, fotos e detalhes que tornam cada presente único e inesquecível.</p>
+      </div>
+      <div class="how__step">
+        <div class="how__step-num">03</div>
+        <div class="how__step-title">Compartilhe</div>
+        <p class="how__step-text">Envie com um clique e surpreenda com uma experiência visual de tirar o fôlego.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       UNIVERSOS
+  ============================================ -->
+  <section class="universos" id="universos">
+    <p class="universos__label">Explore</p>
+    <h2 class="universos__title">Cada amor tem<br>seu <em>universo</em></h2>
+
+    <div class="universos__grid">
+      <!-- Romântico — ATIVO -->
+      <div class="universo-card universo-card--active universo-card--romantico">
+        <div class="universo-card__placeholder universo-card__overlay">
+          <span class="universo-card__label">Romântico</span>
+        </div>
+      </div>
+      <!-- Viagem -->
+      <div class="universo-card universo-card--viagem">
+        <div class="universo-card__placeholder universo-card__overlay">
+          <span class="universo-card__label">Viagem</span>
+        </div>
+      </div>
+      <!-- Gamer -->
+      <div class="universo-card universo-card--gamer">
+        <div class="universo-card__placeholder universo-card__overlay">
+          <span class="universo-card__label">Gamer</span>
+        </div>
+      </div>
+      <!-- Música -->
+      <div class="universo-card universo-card--musica">
+        <div class="universo-card__placeholder universo-card__overlay">
+          <span class="universo-card__label">Música</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONTACT / FORM
+  ============================================ -->
+  <section class="contact" id="contact">
+    <img class="contact__decor"
+         src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/3(1).svg"
+         alt="" aria-hidden="true">
+
+    <div class="contact__text">
+      <p class="contact__label">Vamos criar juntos</p>
+      <h2 class="contact__title">Sua mensagem,<br><em>do seu jeito</em></h2>
+      <p class="contact__sub">
+        Conte-nos sobre o momento especial e deixa a gente transformar
+        em algo que ela nunca vai esquecer.
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn-primary">Ver todos os universos</a>
+      </div>
+    </div>
+
+    <form class="contact__form" onsubmit="return false;">
+      <div class="form-group">
+        <label for="nome">Seu nome</label>
+        <input type="text" id="nome" placeholder="Como você se chama?">
+      </div>
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="seu@email.com">
+      </div>
+      <div class="form-group">
+        <label for="mensagem">Sua mensagem</label>
+        <textarea id="mensagem" placeholder="O que você quer dizer para quem ama?"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Enviar com amor ♡</button>
+    </form>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer" id="footer">
+    <div class="footer__brand">Espaço <span>Am</span>Ori</div>
+    <div class="footer__copy">© 2026 Espaço AmOri</div>
+    <div class="footer__credit">
+      Design por <a href="https://work.tanya-step.ru/" target="_blank" rel="noopener">Tanya Step</a>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       SCRIPTS
+  ============================================ -->
+  <script>
+    // Scroll progress line
+    const scrollLine = document.getElementById('scrollLine');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      scrollLine.style.height = progress + 'vh';
+    });
+
+    // Mobile menu
+    const burgerBtn  = document.getElementById('burgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuClose  = document.getElementById('menuClose');
+
+    burgerBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    menuClose.addEventListener('click', closeMenu);
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) closeMenu();
+    });
+
+    function closeMenu() {
+      mobileMenu.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    // Escape key fecha menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Intersection observer para animações on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.how__step, .universo-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.8s cubic-bezier(0.19,1,0.22,1), transform 0.8s cubic-bezier(0.19,1,0.22,1)';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
