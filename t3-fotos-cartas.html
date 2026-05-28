@@ -1,0 +1,387 @@
+<!-- ============================================================
+     IMPORTS DE FONTES — adicionar no <head> do template principal
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     TELA T3 — FOTOS E CARTAS
+     Envelope clicável com animação de abertura + layout colagem
+     Imagem: _2_1.png.webp (envelope kraft do repositório)
+     ============================================================ -->
+
+<section class="t3-section">
+
+  <!-- SVGs botânicos de fundo -->
+  <img class="t3-botanical t3-botanical--left"
+       src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/Group_229.svg"
+       alt="" aria-hidden="true">
+  <img class="t3-botanical t3-botanical--right"
+       src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/3(1).svg"
+       alt="" aria-hidden="true">
+
+  <!-- Conteúdo central -->
+  <div class="t3-content">
+
+    <!-- Coluna esquerda: textos + envelope -->
+    <div class="t3-left">
+      <p class="t3-script">Your celebration should look</p>
+      <p class="t3-script t3-script--indent">and feel just like you</p>
+      <p class="t3-script t3-script--indent2">and no one else!</p>
+
+      <!-- ENVELOPE CLICÁVEL -->
+      <div class="t3-envelope-wrapper" id="envelopeWrapper" title="Abrir carta">
+        <div class="t3-envelope" id="envelope">
+
+          <div class="t3-envelope__flap" id="envelopeFlap"></div>
+
+          <div class="t3-envelope__body">
+            <img
+              src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/_2_1.png.webp"
+              alt="Envelope kraft"
+              class="t3-envelope__img"
+            >
+          </div>
+
+          <div class="t3-envelope__letter" id="envelopeLetter">
+            <div class="t3-letter-content">
+              <p class="t3-letter-script">Para você,</p>
+              <p class="t3-letter-body">
+                Cada momento que passamos juntos<br>
+                ficará guardado aqui para sempre. 💌
+              </p>
+            </div>
+          </div>
+
+        </div>
+        <span class="t3-envelope__hint" id="envelopeHint">toque para abrir ✦</span>
+      </div>
+    </div>
+
+    <!-- Coluna direita: espelho oval + fotos colagem -->
+    <div class="t3-right">
+
+      <div class="t3-mirror-wrapper">
+        <div class="t3-mirror">
+          <div class="t3-mirror__photo">
+            <img
+              src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/Frame_176_1.png.webp"
+              alt="Memória especial"
+            >
+          </div>
+          <span class="t3-pearl t3-pearl--1"></span>
+          <span class="t3-pearl t3-pearl--2"></span>
+          <span class="t3-pearl t3-pearl--3"></span>
+          <span class="t3-pearl t3-pearl--4"></span>
+          <span class="t3-pearl t3-pearl--5"></span>
+          <span class="t3-pearl t3-pearl--6"></span>
+          <span class="t3-pearl t3-pearl--7"></span>
+          <span class="t3-pearl t3-pearl--8"></span>
+        </div>
+      </div>
+
+      <div class="t3-photo t3-photo--tl">
+        <img src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/Frame_180_1.png.webp" alt="">
+      </div>
+      <div class="t3-photo t3-photo--br">
+        <img src="https://raw.githubusercontent.com/clarisai-prog/teste-universos/main/photo.png.webp" alt="">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ESTILOS T3
+     ============================================================ -->
+<style>
+/* ---------- Variáveis de fonte ---------- */
+:root {
+  --font-script: 'Caveat', cursive;
+  --font-serif:  'Cormorant Garamond', Georgia, serif;
+}
+
+/* ---------- Seção geral ---------- */
+.t3-section {
+  position: relative;
+  background-color: #FAF9F6;
+  overflow: hidden;
+  padding: 80px 40px 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--font-serif);
+}
+
+/* ---------- SVGs botânicos de fundo ---------- */
+.t3-botanical {
+  position: absolute;
+  opacity: 0.18;
+  pointer-events: none;
+  width: 340px;
+}
+.t3-botanical--left {
+  left: -60px;
+  top: 40px;
+  transform: rotate(-10deg);
+}
+.t3-botanical--right {
+  right: -60px;
+  bottom: 20px;
+  transform: rotate(8deg);
+}
+
+/* ---------- Layout interno ---------- */
+.t3-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  max-width: 1100px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Coluna esquerda ---------- */
+.t3-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.t3-script {
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  color: #3a1a1a;
+  line-height: 1.3;
+  margin: 0;
+}
+.t3-script--indent  { padding-left: 24px; }
+.t3-script--indent2 { padding-left: 48px; }
+
+/* ---------- Envelope ---------- */
+.t3-envelope-wrapper {
+  position: relative;
+  margin-top: 32px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.t3-envelope {
+  position: relative;
+  width: 240px;
+  height: 170px;
+  perspective: 800px;
+}
+
+.t3-envelope__body {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(80,30,20,0.18);
+}
+.t3-envelope__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.t3-envelope__flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(135deg, #c8a96e 0%, #a07848 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  border-radius: 4px 4px 0 0;
+}
+
+.t3-envelope.is-open .t3-envelope__flap {
+  transform: rotateX(-160deg);
+}
+
+.t3-envelope__letter {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  right: 12px;
+  height: 130%;
+  background: #fff9f4;
+  border: 1px solid #e8d5c0;
+  border-radius: 6px;
+  padding: 20px 16px;
+  z-index: 5;
+  transform: translateY(0px);
+  opacity: 0;
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s,
+    opacity   0.4s ease 0.3s;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(80,30,20,0.12);
+}
+
+.t3-envelope.is-open .t3-envelope__letter {
+  transform: translateY(-110px);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.t3-letter-script {
+  font-family: var(--font-script);
+  font-size: 1.1rem;
+  color: #8B2020;
+  margin: 0 0 8px;
+}
+.t3-letter-body {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: #4a2828;
+  line-height: 1.7;
+  margin: 0;
+  font-style: italic;
+}
+
+.t3-envelope__hint {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  color: #a07848;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  font-style: italic;
+  transition: opacity 0.4s;
+}
+
+/* ---------- Espelho oval ---------- */
+.t3-right {
+  position: relative;
+  width: 480px;
+  height: 480px;
+  flex-shrink: 0;
+}
+
+.t3-mirror-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.t3-mirror {
+  position: relative;
+  width: 220px;
+  height: 280px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #d4af7a, #b8905a, #e8c88a, #a07848);
+  padding: 8px;
+  box-shadow:
+    0 0 0 3px #c8a96e,
+    0 12px 40px rgba(80,40,10,0.25),
+    inset 0 2px 8px rgba(255,220,150,0.4);
+}
+
+.t3-mirror__photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.t3-mirror__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Pérolas ---------- */
+.t3-pearl {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff, #d4c5b0, #a89070);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.t3-pearl--1 { width:18px; height:18px; top:-8px;    left:50%;   transform:translateX(-50%); }
+.t3-pearl--2 { width:14px; height:14px; top:10px;    left:-6px;  }
+.t3-pearl--3 { width:20px; height:20px; top:50%;     left:-10px; transform:translateY(-50%); }
+.t3-pearl--4 { width:14px; height:14px; bottom:12px; left:-4px;  }
+.t3-pearl--5 { width:18px; height:18px; bottom:-8px; left:50%;   transform:translateX(-50%); }
+.t3-pearl--6 { width:14px; height:14px; bottom:12px; right:-4px; }
+.t3-pearl--7 { width:20px; height:20px; top:50%;     right:-10px;transform:translateY(-50%); }
+.t3-pearl--8 { width:14px; height:14px; top:10px;    right:-6px; }
+
+/* ---------- Fotos de colagem ---------- */
+.t3-photo {
+  position: absolute;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(60,20,10,0.18);
+}
+.t3-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.t3-photo--tl {
+  width: 150px;
+  height: 180px;
+  top: 20px;
+  left: 10px;
+  transform: rotate(-6deg);
+  z-index: 2;
+}
+.t3-photo--br {
+  width: 130px;
+  height: 160px;
+  bottom: 30px;
+  right: 10px;
+  transform: rotate(5deg);
+  z-index: 2;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 768px) {
+  .t3-content    { flex-direction: column; gap: 48px; }
+  .t3-right      { width: 320px; height: 320px; }
+  .t3-mirror     { width: 160px; height: 200px; }
+  .t3-botanical  { width: 200px; }
+  .t3-script     { font-size: 1.3rem; }
+}
+</style>
+
+<!-- ============================================================
+     JAVASCRIPT T3
+     ============================================================ -->
+<script>
+(function() {
+  var wrapper  = document.getElementById('envelopeWrapper');
+  var envelope = document.getElementById('envelope');
+  var hint     = document.getElementById('envelopeHint');
+
+  if (!wrapper || !envelope) return;
+
+  wrapper.addEventListener('click', function() {
+    var isOpen = envelope.classList.contains('is-open');
+    if (isOpen) {
+      envelope.classList.remove('is-open');
+      if (hint) hint.style.opacity = '1';
+    } else {
+      envelope.classList.add('is-open');
+      if (hint) hint.style.opacity = '0';
+    }
+  });
+})();
+</script>
